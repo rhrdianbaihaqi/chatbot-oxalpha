@@ -36,7 +36,7 @@ const app = new Elysia()
       }
 
       const result = await sendChatMessage({
-        model: model || 'openai/gpt-4o-mini',
+        model: model || 'z-ai/glm-5.2:free',
         messages,
       });
 

@@ -19,6 +19,13 @@ export interface ModelOption {
 
 export const POPULAR_MODELS: ModelOption[] = [
   {
+    id: 'z-ai/glm-5.2:free',
+    name: 'GLM 5.2 (Free)',
+    provider: 'Zhipu AI',
+    description: 'High-capability general reasoning & bilingual intelligence',
+    badge: 'Free',
+  },
+  {
     id: 'openai/gpt-4o-mini',
     name: 'GPT-4o Mini',
     provider: 'OpenAI',
@@ -62,7 +69,7 @@ export const POPULAR_MODELS: ModelOption[] = [
 // Core stores as specified in PRD Section 6.1
 export const chatHistory = writable<ChatMessage[]>([]);
 export const isTyping = writable<boolean>(false);
-export const selectedModel = writable<string>('openai/gpt-4o-mini');
+export const selectedModel = writable<string>('z-ai/glm-5.2:free');
 export const serverStatus = writable<'checking' | 'online' | 'offline'>('checking');
 export const errorMessage = writable<string | null>(null);
 

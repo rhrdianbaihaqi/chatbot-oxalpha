@@ -10,7 +10,7 @@
   import ChatWindow from './lib/components/ChatWindow.svelte';
   import ChatInput from './lib/components/ChatInput.svelte';
   import ModelSelector from './lib/components/ModelSelector.svelte';
-  import { Bot, Trash2, RefreshCw, AlertCircle, CheckCircle2, XCircle } from 'lucide-svelte';
+  import { BotIcon, TrashIcon, AlertCircleIcon } from './lib/icons';
 
   onMount(() => {
     checkServerHealth();
@@ -25,7 +25,7 @@
     <!-- Brand / Title -->
     <div class="flex items-center gap-3">
       <div class="w-9 h-9 rounded-xl bg-primary-500 text-white flex items-center justify-center shadow-sm">
-        <Bot size={20} />
+        <BotIcon size={20} />
       </div>
       <div>
         <div class="flex items-center gap-2">
@@ -65,7 +65,7 @@
           class="flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium text-surface-600 hover:text-rose-600 hover:bg-rose-50 border border-surface-200 transition-colors"
           title="Clear Conversation"
         >
-          <Trash2 size={13} />
+          <TrashIcon size={13} />
           <span class="hidden sm:inline">Clear</span>
         </button>
       {/if}

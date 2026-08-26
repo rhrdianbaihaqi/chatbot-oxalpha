@@ -44,7 +44,7 @@ export async function sendChatMessage(payload: ChatRequestPayload): Promise<Chat
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: payload.model || 'openai/gpt-4o-mini',
+        model: payload.model || 'z-ai/glm-5.2:free',
         messages: payload.messages,
       }),
     });
