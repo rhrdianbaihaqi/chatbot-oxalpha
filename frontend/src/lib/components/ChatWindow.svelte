@@ -70,13 +70,14 @@
         <!-- Prompt Cards Grid -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-xl mt-8">
           {#each starterPrompts as prompt}
+            {@const IconComponent = prompt.icon}
             <button
               type="button"
               on:click={() => handlePromptClick(prompt.desc)}
               class="flex items-start gap-3 p-3.5 rounded-2xl bg-surface-50 hover:bg-surface-100/80 border border-surface-200 text-left transition-all hover:shadow-sm group focus:outline-none focus:ring-2 focus:ring-primary-500/20"
             >
               <div class="p-2 rounded-xl bg-white text-surface-700 group-hover:text-primary-500 group-hover:bg-primary-50 border border-surface-200 transition-colors">
-                <svelte:component this={prompt.icon} size={18} />
+                <IconComponent size={18} />
               </div>
               <div class="flex-1 min-w-0">
                 <h4 class="text-xs font-semibold text-surface-800 group-hover:text-primary-600">
