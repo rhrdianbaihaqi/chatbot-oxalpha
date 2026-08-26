@@ -2,7 +2,7 @@
   import { afterUpdate } from 'svelte';
   import { chatHistory, isTyping, sendMessage } from '../store';
   import MessageBubble from './MessageBubble.svelte';
-  import { Bot, Sparkles, Code, Lightbulb, Compass } from 'lucide-svelte';
+  import { BotIcon, SparklesIcon, CodeIcon, LightbulbIcon, CompassIcon } from '../icons';
 
   let messagesContainer: HTMLDivElement;
 
@@ -10,22 +10,22 @@
     {
       title: 'Explain a Concept',
       desc: 'Explain quantum computing in simple terms with analogies',
-      icon: Lightbulb,
+      icon: LightbulbIcon,
     },
     {
       title: 'Code Generation',
       desc: 'Write an ElysiaJS middleware to log response time and request ID',
-      icon: Code,
+      icon: CodeIcon,
     },
     {
       title: 'System Design',
       desc: 'Design a high-throughput webhook processing architecture',
-      icon: Compass,
+      icon: CompassIcon,
     },
     {
       title: 'Creative Writing',
       desc: 'Draft a concise executive summary for an AI startup pitch',
-      icon: Sparkles,
+      icon: SparklesIcon,
     },
   ];
 
@@ -57,7 +57,7 @@
       <div class="flex-1 flex flex-col items-center justify-center text-center my-auto py-10 animate-in fade-in duration-300">
         <!-- Logo / Icon -->
         <div class="w-16 h-16 rounded-3xl bg-primary-50 text-primary-500 flex items-center justify-center mb-6 shadow-sm border border-primary-100">
-          <Bot size={36} />
+          <BotIcon size={36} />
         </div>
 
         <h2 class="text-2xl sm:text-3xl font-semibold text-surface-900 tracking-tight">
@@ -101,7 +101,7 @@
       {#if $isTyping}
         <div class="flex items-start gap-3 pr-10 animate-in fade-in duration-200">
           <div class="flex-shrink-0 w-8 h-8 rounded-full bg-primary-500 text-white flex items-center justify-center shadow-sm">
-            <Bot size={18} />
+            <BotIcon size={18} />
           </div>
           <div class="flex items-center gap-1.5 px-4 py-3 bg-surface-50 border border-surface-200 rounded-2xl rounded-tl-sm text-surface-500 text-xs">
             <span class="w-2 h-2 rounded-full bg-primary-500 animate-bounce" style="animation-delay: 0ms"></span>
