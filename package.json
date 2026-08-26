@@ -1,0 +1,17 @@
+{
+  "name": "chatbot-oxalpha",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "dev": "export PATH=\"$HOME/.bun/bin:$PATH\"; bun --filter '*' dev",
+    "dev:backend": "export PATH=\"$HOME/.bun/bin:$PATH\"; bun --filter backend dev",
+    "dev:frontend": "export PATH=\"$HOME/.bun/bin:$PATH\"; bun --filter frontend dev",
+    "build": "export PATH=\"$HOME/.bun/bin:$PATH\"; bun --filter frontend build",
+    "health": "curl http://localhost:3001/api/health"
+  }
+}
