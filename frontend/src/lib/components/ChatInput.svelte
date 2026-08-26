@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { isTyping, sendMessage } from '../store';
-  import { ArrowUp, CornerDownLeft, Sparkles } from 'lucide-svelte';
+  import { ArrowUpIcon, SparklesIcon } from '../icons';
 
   let inputEl: HTMLTextAreaElement;
   let text = '';
@@ -69,7 +69,7 @@
         {#if $isTyping}
           <div class="w-4 h-4 border-2 border-surface-400 border-t-transparent rounded-full animate-spin"></div>
         {:else}
-          <ArrowUp size={18} strokeWidth={2.5} />
+          <ArrowUpIcon size={18} strokeWidth={2.5} />
         {/if}
       </button>
     </div>
@@ -77,7 +77,7 @@
     <!-- Bottom info hint -->
     <div class="flex items-center justify-between px-2 pt-1 border-t border-surface-100 text-[11px] text-surface-400">
       <div class="flex items-center gap-1.5">
-        <Sparkles size={12} class="text-primary-500" />
+        <SparklesIcon size={12} class="text-primary-500" />
         <span>Powered by OpenRouter LLMs</span>
       </div>
       <div class="hidden sm:flex items-center gap-1">
