@@ -76,7 +76,7 @@
   {#if $errorMessage}
     <div class="bg-rose-50 border-b border-rose-200 px-4 py-2 flex items-center justify-between text-xs text-rose-800">
       <div class="flex items-center gap-2">
-        <AlertCircle size={15} class="text-rose-600 flex-shrink-0" />
+        <AlertCircleIcon size={15} class="text-rose-600 flex-shrink-0" />
         <span>{$errorMessage}</span>
       </div>
       <button
