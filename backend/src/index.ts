@@ -41,7 +41,7 @@ const app = new Elysia()
       });
 
       if (!result.success) {
-        set.status = 502;
+        set.status = 400; // Use 400 instead of 502 so Vite proxy doesn't intercept it
         return result;
       }
 
