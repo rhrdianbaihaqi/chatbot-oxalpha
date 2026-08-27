@@ -19,57 +19,38 @@ export interface ModelOption {
 
 export const POPULAR_MODELS: ModelOption[] = [
   {
-    id: 'z-ai/glm-5.2:free',
-    name: 'GLM 5.2 (Free)',
-    provider: 'Zhipu AI',
-    description: 'High-capability general reasoning & bilingual intelligence',
-    badge: 'Free',
-  },
-  {
     id: 'openai/gpt-4o-mini',
     name: 'GPT-4o Mini',
     provider: 'OpenAI',
-    description: 'Fast, intelligent, highly cost-effective flagship model',
+    description: 'Fast, intelligent, and highly cost-effective model',
     badge: 'Popular',
   },
   {
     id: 'anthropic/claude-3.5-sonnet',
     name: 'Claude 3.5 Sonnet',
     provider: 'Anthropic',
-    description: 'State-of-the-art reasoning, code, and writing abilities',
+    description: 'Top-tier reasoning, code generation, and writing',
     badge: 'Pro',
-  },
-  {
-    id: 'anthropic/claude-3-haiku',
-    name: 'Claude 3 Haiku',
-    provider: 'Anthropic',
-    description: 'Ultra-fast and responsive compact model',
-  },
-  {
-    id: 'meta-llama/llama-3.3-70b-instruct',
-    name: 'Llama 3.3 70B',
-    provider: 'Meta',
-    description: 'Open powerhouse model for multi-turn conversations',
   },
   {
     id: 'deepseek/deepseek-chat',
     name: 'DeepSeek V3',
     provider: 'DeepSeek',
-    description: 'Next-gen reasoning and code intelligence',
+    description: 'Powerful next-gen reasoning and code intelligence',
     badge: 'Trending',
   },
   {
     id: 'google/gemini-2.0-flash-001',
     name: 'Gemini 2.0 Flash',
     provider: 'Google',
-    description: 'Next-gen speed, multimodal intelligence, and reasoning',
+    description: 'Next-gen speed and multimodal intelligence',
   },
 ];
 
 // Core stores as specified in PRD Section 6.1
 export const chatHistory = writable<ChatMessage[]>([]);
 export const isTyping = writable<boolean>(false);
-export const selectedModel = writable<string>('z-ai/glm-5.2:free');
+export const selectedModel = writable<string>('openai/gpt-4o-mini');
 export const serverStatus = writable<'checking' | 'online' | 'offline'>('checking');
 export const errorMessage = writable<string | null>(null);
 
