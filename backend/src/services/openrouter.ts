@@ -98,7 +98,7 @@ export async function sendChatMessage(payload: ChatRequestPayload): Promise<Chat
       };
     }
 
-    const data = await response.json();
+    const data = (await response.json()) as any;
     const assistantMessage = data.choices?.[0]?.message;
 
     if (!assistantMessage || !assistantMessage.content) {

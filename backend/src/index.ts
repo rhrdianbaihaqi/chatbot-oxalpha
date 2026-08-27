@@ -49,7 +49,7 @@ const app = new Elysia()
     },
     {
       body: t.Object({
-        model: t.String(),
+        model: t.Optional(t.String()),
         messages: t.Array(
           t.Object({
             role: t.Union([
