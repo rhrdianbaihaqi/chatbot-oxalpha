@@ -7,8 +7,6 @@ if (!target) {
   throw new Error('Target element #app not found in DOM');
 }
 
-const app = mount(App, {
-  target,
-});
+const app = mount(App, { target });
 
 export default app;

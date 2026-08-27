@@ -1,6 +1,6 @@
 <script lang="ts">
   import { selectedModel, POPULAR_MODELS } from '../store';
-  import { ChevronDown, Cpu, Sparkles, Check, Plus } from 'lucide-svelte';
+  import { ChevronDownIcon, CpuIcon, CheckIcon, PlusIcon } from '../icons';
 
   let isOpen = false;
   let customModelInput = '';
@@ -49,14 +49,14 @@
     on:click={toggleOpen}
     class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-100 hover:bg-surface-200 text-surface-800 text-xs font-medium border border-surface-200 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500/20"
   >
-    <Cpu size={14} class="text-primary-500" />
+    <CpuIcon size={14} class="text-primary-500" />
     <span class="max-w-[140px] truncate">{currentModelInfo.name}</span>
     {#if currentModelInfo.badge}
       <span class="px-1.5 py-0.2 bg-primary-50 text-primary-600 text-[10px] font-semibold rounded-md">
         {currentModelInfo.badge}
       </span>
     {/if}
-    <ChevronDown size={14} class="text-surface-500 transition-transform {isOpen ? 'rotate-180' : ''}" />
+    <ChevronDownIcon size={14} class="text-surface-500 transition-transform {isOpen ? 'rotate-180' : ''}" />
   </button>
 
   <!-- Backdrop for click outside -->
@@ -108,7 +108,7 @@
             </div>
 
             {#if $selectedModel === model.id}
-              <Check size={16} class="text-primary-500 flex-shrink-0 mt-0.5" />
+              <CheckIcon size={16} class="text-primary-500 flex-shrink-0 mt-0.5" />
             {/if}
           </button>
         {/each}
@@ -122,7 +122,7 @@
             class="w-full text-xs text-primary-600 hover:text-primary-700 flex items-center justify-center gap-1.5 py-1.5 font-medium hover:bg-surface-100 rounded-lg transition-colors"
             on:click={() => (showCustomInput = true)}
           >
-            <Plus size={14} />
+            <PlusIcon size={14} />
             <span>Enter custom OpenRouter model ID</span>
           </button>
         {:else}

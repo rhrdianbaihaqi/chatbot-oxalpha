@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { ChatMessage } from '../store';
   import { renderMarkdown } from '../utils/markdown';
-  import { Bot, User, Copy, Check } from 'lucide-svelte';
+  import { BotIcon, UserIcon, CopyIcon, CheckIcon } from '../icons';
 
   export let message: ChatMessage;
 
@@ -37,14 +37,14 @@
         </span>
       </div>
       <div class="flex-shrink-0 w-8 h-8 rounded-full bg-surface-200 flex items-center justify-center text-surface-700 shadow-sm mt-0.5">
-        <User size={16} />
+        <UserIcon size={16} />
       </div>
     </div>
   {:else}
     <!-- Assistant Message Bubble (Left aligned) -->
     <div class="flex justify-start items-start gap-3 pr-10">
       <div class="flex-shrink-0 w-8 h-8 rounded-full bg-primary-500 text-white flex items-center justify-center shadow-sm mt-0.5">
-        <Bot size={18} />
+        <BotIcon size={18} />
       </div>
       
       <div class="flex flex-col items-start flex-1 min-w-0 max-w-[92%] sm:max-w-[85%]">
@@ -73,10 +73,10 @@
             title="Copy response"
           >
             {#if copied}
-              <Check size={13} class="text-green-600" />
+              <CheckIcon size={13} class="text-green-600" />
               <span class="text-green-600">Copied</span>
             {:else}
-              <Copy size={13} />
+              <CopyIcon size={13} />
               <span>Copy text</span>
             {/if}
           </button>

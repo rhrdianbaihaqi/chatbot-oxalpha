@@ -1,3 +1,6 @@
+import fs from 'fs';
+import path from 'path';
+
 export interface ChatMessage {
   role: 'user' | 'assistant' | 'system';
   content: string;
@@ -17,8 +20,39 @@ export interface ChatResponsePayload {
   error?: string;
 }
 
+function getApiKey(): string {
+  if (process.env.OPENROUTER_API_KEY && process.env.OPENROUTER_API_KEY.trim()) {
+    return process.env.OPENROUTER_API_KEY.trim();
+  }
+
+  // Attempt to load directly from .env files if not populated in process.env
+  const pathsToCheck = [
+    path.resolve(process.cwd(), 'backend/.env'),
+    path.resolve(process.cwd(), '.env'),
+    path.resolve(__dirname, '../../.env'),
+    path.resolve(__dirname, '../.env'),
+  ];
+
+  for (const envPath of pathsToCheck) {
+    if (fs.existsSync(envPath)) {
+      try {
+        const content = fs.readFileSync(envPath, 'utf8');
+        const match = content.match(/^OPENROUTER_API_KEY=(.+)$/m);
+        if (match && match[1]?.trim()) {
+          const key = match[1].trim().replace(/^["']|["']$/g, '');
+          if (key) return key;
+        }
+      } catch {
+        // ignore
+      }
+    }
+  }
+
+  return '';
+}
+
 export async function sendChatMessage(payload: ChatRequestPayload): Promise<ChatResponsePayload> {
-  const apiKey = process.env.OPENROUTER_API_KEY?.trim();
+  const apiKey = getApiKey();
 
   if (!apiKey) {
     // If no API key provided, provide a clear instructional response so the app can still be tested
@@ -64,7 +98,7 @@ export async function sendChatMessage(payload: ChatRequestPayload): Promise<Chat
       };
     }
 
-    const data = await response.json();
+    const data = (await response.json()) as any;
     const assistantMessage = data.choices?.[0]?.message;
 
     if (!assistantMessage || !assistantMessage.content) {

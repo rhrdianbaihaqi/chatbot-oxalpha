@@ -41,7 +41,7 @@ const app = new Elysia()
       });
 
       if (!result.success) {
-        set.status = 502;
+        set.status = 400; // Use 400 instead of 502 so Vite proxy doesn't intercept it
         return result;
       }
 
@@ -49,7 +49,7 @@ const app = new Elysia()
     },
     {
       body: t.Object({
-        model: t.String(),
+        model: t.Optional(t.String()),
         messages: t.Array(
           t.Object({
             role: t.Union([
@@ -66,5 +66,5 @@ const app = new Elysia()
   .listen(port);
 
 console.log(
-  `🚀 Elysia server is running at http://${app.server?.hostname}:${app.server?.port}`
+  `Elysia server is running at http://${app.server?.hostname}:${app.server?.port}`
 );

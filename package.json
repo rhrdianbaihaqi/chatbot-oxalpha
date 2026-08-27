@@ -8,9 +8,9 @@
     "frontend"
   ],
   "scripts": {
-    "dev": "export PATH=\"$HOME/.bun/bin:$PATH\"; bun --filter '*' dev",
-    "dev:backend": "export PATH=\"$HOME/.bun/bin:$PATH\"; bun --filter backend dev",
-    "dev:frontend": "export PATH=\"$HOME/.bun/bin:$PATH\"; bun --filter frontend dev",
+    "dev": "export PATH=\"$HOME/.bun/bin:$PATH\"; (lsof -ti :5173 -ti :3001 | xargs kill -9 2>/dev/null || true); bun --filter '*' dev",
+    "dev:backend": "export PATH=\"$HOME/.bun/bin:$PATH\"; (lsof -ti :3001 | xargs kill -9 2>/dev/null || true); bun --filter backend dev",
+    "dev:frontend": "export PATH=\"$HOME/.bun/bin:$PATH\"; (lsof -ti :5173 | xargs kill -9 2>/dev/null || true); bun --filter frontend dev",
     "build": "export PATH=\"$HOME/.bun/bin:$PATH\"; bun --filter frontend build",
     "health": "curl http://localhost:3001/api/health"
   }
