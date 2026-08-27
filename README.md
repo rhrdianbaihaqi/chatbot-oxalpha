@@ -1,4 +1,5 @@
 # 🤖 OxAlpha AI Chatbot MVP
+
 A high-performance, lightweight web-based AI chatbot application powered by **Bun**, **ElysiaJS**, **Svelte**, **Tailwind CSS**, and **OpenRouter API**.
 
 ---
