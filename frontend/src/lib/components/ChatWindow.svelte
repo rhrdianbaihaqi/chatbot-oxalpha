@@ -29,8 +29,17 @@
     },
   ];
 
-  function scrollToBottom() {
-    if (messagesContainer) {
+  let prevLength = 0;
+
+  function scrollToBottom(force = false) {
+    if (!messagesContainer) return;
+    const distanceFromBottom =
+      messagesContainer.scrollHeight -
+      messagesContainer.scrollTop -
+      messagesContainer.clientHeight;
+
+    // Auto-scroll if forced or user is already close to the bottom (within 200px)
+    if (force || distanceFromBottom < 200) {
       messagesContainer.scrollTo({
         top: messagesContainer.scrollHeight,
         behavior: 'smooth',
@@ -39,7 +48,11 @@
   }
 
   afterUpdate(() => {
-    scrollToBottom();
+    const currentLength = $chatHistory.length;
+    if (currentLength !== prevLength || $isTyping) {
+      scrollToBottom(currentLength > prevLength);
+      prevLength = currentLength;
+    }
   });
 
   function handlePromptClick(desc: string) {
