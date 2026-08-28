@@ -81,6 +81,7 @@ export async function sendChatMessage(payload: ChatRequestPayload): Promise<Chat
         model: payload.model || 'openai/gpt-4o-mini',
         messages: payload.messages,
       }),
+      signal: AbortSignal.timeout(45000),
     });
 
     if (!response.ok) {
@@ -116,6 +117,12 @@ export async function sendChatMessage(payload: ChatRequestPayload): Promise<Chat
       }
     };
   } catch (err: any) {
+    if (err?.name === 'TimeoutError' || err?.message?.includes('timeout')) {
+      return {
+        success: false,
+        error: 'OpenRouter request timed out after 45 seconds. Please try again.'
+      };
+    }
     return {
       success: false,
       error: `Failed to connect to OpenRouter: ${err?.message || String(err)}`
