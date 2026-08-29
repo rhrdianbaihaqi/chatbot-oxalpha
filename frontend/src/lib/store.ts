@@ -47,11 +47,21 @@ export const POPULAR_MODELS: ModelOption[] = [
   },
 ];
 
+// Retrieve initial values from localStorage if available
+const initialHistory = typeof localStorage !== 'undefined' ? JSON.parse(localStorage.getItem('chatHistory') || '[]') : [];
+const initialModel = typeof localStorage !== 'undefined' ? localStorage.getItem('selectedModel') || 'openai/gpt-4o-mini' : 'openai/gpt-4o-mini';
+
 // Core stores as specified in PRD Section 6.1
-export const chatHistory = writable<ChatMessage[]>([]);
+export const chatHistory = writable<ChatMessage[]>(initialHistory);
 export const isTyping = writable<boolean>(false);
-export const selectedModel = writable<string>('openai/gpt-4o-mini');
+export const selectedModel = writable<string>(initialModel);
 export const serverStatus = writable<'checking' | 'online' | 'offline'>('checking');
+
+// Persist stores to localStorage
+if (typeof localStorage !== 'undefined') {
+  chatHistory.subscribe((val) => localStorage.setItem('chatHistory', JSON.stringify(val)));
+  selectedModel.subscribe((val) => localStorage.setItem('selectedModel', val));
+}
 export const errorMessage = writable<string | null>(null);
 
 // Actions & Helpers
