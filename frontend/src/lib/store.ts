@@ -47,12 +47,43 @@ export const POPULAR_MODELS: ModelOption[] = [
   },
 ];
 
+const CHAT_HISTORY_KEY = 'oxalpha:chatHistory';
+const SELECTED_MODEL_KEY = 'oxalpha:selectedModel';
+
+function readStoredJSON<T>(key: string, fallback: T): T {
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? (JSON.parse(raw) as T) : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
 // Core stores as specified in PRD Section 6.1
-export const chatHistory = writable<ChatMessage[]>([]);
+export const chatHistory = writable<ChatMessage[]>(readStoredJSON(CHAT_HISTORY_KEY, []));
 export const isTyping = writable<boolean>(false);
-export const selectedModel = writable<string>('openai/gpt-4o-mini');
+export const selectedModel = writable<string>(
+  readStoredJSON(SELECTED_MODEL_KEY, 'openai/gpt-4o-mini')
+);
 export const serverStatus = writable<'checking' | 'online' | 'offline'>('checking');
 export const errorMessage = writable<string | null>(null);
+
+// Persist chat/model state across reloads so refreshing the tab doesn't lose the conversation.
+chatHistory.subscribe((history) => {
+  try {
+    localStorage.setItem(CHAT_HISTORY_KEY, JSON.stringify(history));
+  } catch (err) {
+    console.error('Failed to persist chat history:', err);
+  }
+});
+
+selectedModel.subscribe((model) => {
+  try {
+    localStorage.setItem(SELECTED_MODEL_KEY, JSON.stringify(model));
+  } catch (err) {
+    console.error('Failed to persist selected model:', err);
+  }
+});
 
 // Actions & Helpers
 export function addMessage(role: 'user' | 'assistant' | 'system', content: string, model?: string): ChatMessage {

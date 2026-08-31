@@ -7,12 +7,37 @@
 
   let copied = false;
 
-  function copyMessageContent() {
-    navigator.clipboard.writeText(message.content);
-    copied = true;
-    setTimeout(() => {
-      copied = false;
-    }, 2000);
+  async function copyMessageContent() {
+    try {
+      await navigator.clipboard.writeText(message.content);
+      copied = true;
+      setTimeout(() => {
+        copied = false;
+      }, 2000);
+    } catch (err) {
+      console.error('Failed to copy message content:', err);
+    }
+  }
+
+  // Code blocks are rendered via {@html}, so their copy buttons can't carry
+  // Svelte event handlers directly — handle clicks via delegation instead.
+  async function handleBodyClick(e: MouseEvent) {
+    const btn = (e.target as HTMLElement)?.closest<HTMLButtonElement>('.copy-code-btn');
+    if (!btn) return;
+
+    const code = decodeURIComponent(btn.dataset.code ?? '');
+    try {
+      await navigator.clipboard.writeText(code);
+      const orig = btn.innerHTML;
+      btn.innerHTML = '✓ Copied!';
+      btn.classList.add('text-green-400');
+      setTimeout(() => {
+        btn.innerHTML = orig;
+        btn.classList.remove('text-green-400');
+      }, 2000);
+    } catch (err) {
+      console.error('Failed to copy code block:', err);
+    }
   }
 
   function formatTime(timestamp: number): string {
@@ -60,7 +85,12 @@
         </div>
 
         <!-- Rendered Message Body -->
-        <div class="markdown-body w-full text-surface-900 bg-white p-1 break-words">
+        <!-- svelte-ignore a11y_click_events_have_key_events -->
+        <!-- svelte-ignore a11y_no_static_element_interactions -->
+        <div
+          class="markdown-body w-full text-surface-900 bg-white p-1 break-words"
+          on:click={handleBodyClick}
+        >
           {@html renderedHtml}
         </div>
 
