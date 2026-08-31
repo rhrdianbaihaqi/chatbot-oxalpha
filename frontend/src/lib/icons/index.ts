@@ -8,6 +8,7 @@ export { default as CpuIcon } from './CpuIcon.svelte';
 export { default as PlusIcon } from './PlusIcon.svelte';
 export { default as TrashIcon } from './TrashIcon.svelte';
 export { default as AlertCircleIcon } from './AlertCircleIcon.svelte';
+export { default as RefreshIcon } from './RefreshIcon.svelte';
 export { default as SparklesIcon } from './SparklesIcon.svelte';
 export { default as LightbulbIcon } from './LightbulbIcon.svelte';
 export { default as CodeIcon } from './CodeIcon.svelte';

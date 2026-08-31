@@ -67,6 +67,8 @@ export const selectedModel = writable<string>(
 );
 export const serverStatus = writable<'checking' | 'online' | 'offline'>('checking');
 export const errorMessage = writable<string | null>(null);
+// Content of the last user message whose request failed, so the UI can offer a retry.
+export const lastFailedMessage = writable<string | null>(null);
 
 // Persist chat/model state across reloads so refreshing the tab doesn't lose the conversation.
 chatHistory.subscribe((history) => {
@@ -98,9 +100,17 @@ export function addMessage(role: 'user' | 'assistant' | 'system', content: strin
   return newMsg;
 }
 
+// Tracks the fetch for whatever sendMessage call is currently in flight, so a
+// superseding call (e.g. clearChat) can cancel it instead of letting a late
+// response resurrect state after the user has moved on.
+let activeController: AbortController | null = null;
+
 export function clearChat() {
+  activeController?.abort();
+  activeController = null;
   chatHistory.set([]);
   errorMessage.set(null);
+  lastFailedMessage.set(null);
 }
 
 export async function checkServerHealth(): Promise<boolean> {
@@ -124,6 +134,7 @@ export async function sendMessage(content: string) {
 
   const currentModel = get(selectedModel);
   errorMessage.set(null);
+  lastFailedMessage.set(null);
 
   // Append user message
   addMessage('user', trimmed);
@@ -136,6 +147,9 @@ export async function sendMessage(content: string) {
     content: m.content,
   }));
 
+  const controller = new AbortController();
+  activeController = controller;
+
   try {
     const res = await fetch('/api/chat', {
       method: 'POST',
@@ -146,6 +160,7 @@ export async function sendMessage(content: string) {
         model: currentModel,
         messages: messagesPayload,
       }),
+      signal: controller.signal,
     });
 
     const data = await res.json();
@@ -153,6 +168,7 @@ export async function sendMessage(content: string) {
     if (!res.ok || !data.success) {
       const errorDetail = data.error || 'Failed to fetch AI response';
       errorMessage.set(errorDetail);
+      lastFailedMessage.set(trimmed);
       addMessage(
         'assistant',
         `⚠️ **Error:** ${errorDetail}`,
@@ -162,10 +178,25 @@ export async function sendMessage(content: string) {
       addMessage('assistant', data.message.content, currentModel);
     }
   } catch (err: any) {
+    if (err?.name === 'AbortError') {
+      // Request was intentionally cancelled (e.g. chat cleared) — nothing to surface.
+      return;
+    }
     const errText = err?.message || 'Network error connecting to backend';
     errorMessage.set(errText);
+    lastFailedMessage.set(trimmed);
     addMessage('assistant', `⚠️ **Network Error:** Could not reach the backend server at \`/api/chat\` (${errText}).`, currentModel);
   } finally {
+    if (activeController === controller) {
+      activeController = null;
+    }
     isTyping.set(false);
+  }
+}
+
+export function retryLastMessage() {
+  const content = get(lastFailedMessage);
+  if (content) {
+    sendMessage(content);
   }
 }

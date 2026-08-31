@@ -6,11 +6,14 @@
     serverStatus,
     checkServerHealth,
     errorMessage,
+    lastFailedMessage,
+    retryLastMessage,
+    isTyping,
   } from './lib/store';
   import ChatWindow from './lib/components/ChatWindow.svelte';
   import ChatInput from './lib/components/ChatInput.svelte';
   import ModelSelector from './lib/components/ModelSelector.svelte';
-  import { BotIcon, TrashIcon, AlertCircleIcon } from './lib/icons';
+  import { BotIcon, TrashIcon, AlertCircleIcon, RefreshIcon } from './lib/icons';
 
   onMount(() => {
     checkServerHealth();
@@ -75,17 +78,30 @@
   <!-- Error Banner if any -->
   {#if $errorMessage}
     <div class="bg-rose-50 border-b border-rose-200 px-4 py-2 flex items-center justify-between text-xs text-rose-800">
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-2 min-w-0">
         <AlertCircleIcon size={15} class="text-rose-600 flex-shrink-0" />
-        <span>{$errorMessage}</span>
+        <span class="truncate">{$errorMessage}</span>
       </div>
-      <button
-        type="button"
-        on:click={() => errorMessage.set(null)}
-        class="text-rose-600 hover:text-rose-900 font-bold px-1"
-      >
-        ×
-      </button>
+      <div class="flex items-center gap-1 flex-shrink-0">
+        {#if $lastFailedMessage}
+          <button
+            type="button"
+            on:click={retryLastMessage}
+            disabled={$isTyping}
+            class="flex items-center gap-1 text-rose-700 hover:text-rose-900 font-medium px-2 py-0.5 rounded hover:bg-rose-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <RefreshIcon size={12} />
+            Retry
+          </button>
+        {/if}
+        <button
+          type="button"
+          on:click={() => errorMessage.set(null)}
+          class="text-rose-600 hover:text-rose-900 font-bold px-1"
+        >
+          ×
+        </button>
+      </div>
     </div>
   {/if}
 
