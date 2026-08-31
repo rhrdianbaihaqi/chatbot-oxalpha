@@ -1,5 +1,6 @@
 import { Elysia, t } from 'elysia';
 import { cors } from '@elysiajs/cors';
+import { staticPlugin } from '@elysiajs/static';
 import { sendChatMessage } from './services/openrouter';
 
 const startTime = Date.now();
@@ -11,6 +12,12 @@ const app = new Elysia()
       origin: true,
       methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
       allowedHeaders: ['Content-Type', 'Authorization'],
+    })
+  )
+  .use(
+    staticPlugin({
+      assets: '../frontend/dist',
+      prefix: '/',
     })
   )
   // GET /api/health
