@@ -5,6 +5,7 @@
   let isOpen = false;
   let customModelInput = '';
   let showCustomInput = false;
+  let triggerEl: HTMLButtonElement;
 
   $: currentModelInfo = POPULAR_MODELS.find((m) => m.id === $selectedModel) || {
     id: $selectedModel,
@@ -33,9 +34,14 @@
     isOpen = !isOpen;
   }
 
+  function closeAndFocusTrigger() {
+    isOpen = false;
+    triggerEl?.focus();
+  }
+
   function handleKeydown(e: KeyboardEvent) {
-    if (e.key === 'Escape') {
-      isOpen = false;
+    if (e.key === 'Escape' && isOpen) {
+      closeAndFocusTrigger();
     }
   }
 </script>
@@ -45,8 +51,12 @@
 <div class="relative">
   <!-- Trigger Button -->
   <button
+    bind:this={triggerEl}
     type="button"
     on:click={toggleOpen}
+    aria-haspopup="listbox"
+    aria-expanded={isOpen}
+    aria-label="Select AI model, current: {currentModelInfo.name}"
     class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-100 hover:bg-surface-200 text-surface-800 text-xs font-medium border border-surface-200 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500/20"
   >
     <CpuIcon size={14} class="text-primary-500" />
@@ -63,7 +73,7 @@
   {#if isOpen}
     <div
       class="fixed inset-0 z-40"
-      on:click={() => (isOpen = false)}
+      on:click={closeAndFocusTrigger}
       on:keydown={() => {}}
       role="button"
       tabindex="-1"
@@ -83,10 +93,12 @@
       </div>
 
       <!-- Models List -->
-      <div class="max-h-72 overflow-y-auto p-1.5 divide-y divide-surface-100">
+      <div class="max-h-72 overflow-y-auto p-1.5 divide-y divide-surface-100" role="listbox" aria-label="Available AI models">
         {#each POPULAR_MODELS as model}
           <button
             type="button"
+            role="option"
+            aria-selected={$selectedModel === model.id}
             class="w-full text-left p-2.5 rounded-xl hover:bg-surface-100 transition-colors flex items-start justify-between gap-3 group {$selectedModel === model.id ? 'bg-primary-50/50' : ''}"
             on:click={() => selectModel(model.id)}
           >

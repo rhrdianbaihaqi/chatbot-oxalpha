@@ -53,6 +53,7 @@
         on:input={adjustHeight}
         on:keydown={handleKeyDown}
         placeholder="Ask anything (e.g. explain quantum computing, write code, analyze data)..."
+        aria-label="Chat message input"
         rows="1"
         disabled={$isTyping}
         class="w-full resize-none bg-transparent border-0 focus:ring-0 focus:outline-none text-[0.95rem] text-surface-900 placeholder:text-surface-400 py-2.5 max-h-48 overflow-y-auto leading-relaxed disabled:opacity-60"

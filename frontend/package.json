@@ -10,12 +10,14 @@
     "check": "svelte-check --tsconfig ./tsconfig.json"
   },
   "dependencies": {
+    "dompurify": "^3.4.14",
     "highlight.js": "^11.11.1",
     "marked": "^15.0.6"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^4.0.4",
     "@tsconfig/svelte": "^5.0.4",
+    "@types/dompurify": "^3.2.0",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.49",
     "svelte": "^5.2.0",
