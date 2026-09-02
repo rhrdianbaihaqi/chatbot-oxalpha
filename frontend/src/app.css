@@ -29,6 +29,14 @@
   background: #BDC1C6;
 }
 
+.dark ::-webkit-scrollbar-thumb {
+  background: #5F6368;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #80868B;
+}
+
 /* Markdown typography and code highlight styling */
 .markdown-body {
   font-size: 0.95rem;
@@ -118,6 +126,45 @@
 
 .markdown-body tr:nth-child(even) {
   background-color: #FAFAFA;
+}
+
+/* Dark mode overrides for markdown typography (Tailwind's dark: variant
+   doesn't reach {@html}-rendered markup, so these mirror the light-mode
+   rules above by hand). Code blocks stay VS-Code-dark regardless of theme. */
+.dark .markdown-body {
+  color: #E8EAED;
+}
+
+.dark .markdown-body h1,
+.dark .markdown-body h2,
+.dark .markdown-body h3,
+.dark .markdown-body h4 {
+  color: #F1F3F4;
+}
+
+.dark .markdown-body blockquote {
+  border-left-color: #8AB4F8;
+  color: #BDC1C6;
+  background: #292A2D;
+}
+
+.dark .markdown-body code:not(pre code) {
+  background-color: #3C4043;
+  color: #F28B82;
+}
+
+.dark .markdown-body th,
+.dark .markdown-body td {
+  border-color: #5F6368;
+}
+
+.dark .markdown-body th {
+  background-color: #303134;
+  color: #E8EAED;
+}
+
+.dark .markdown-body tr:nth-child(even) {
+  background-color: #28292C;
 }
 
 /* Highlight.js theme overrides for clean code blocks */

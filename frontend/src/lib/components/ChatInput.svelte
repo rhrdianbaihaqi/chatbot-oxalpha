@@ -44,7 +44,7 @@
 </script>
 
 <div class="w-full max-w-3xl mx-auto px-4 pb-4">
-  <div class="relative bg-white border border-surface-300 rounded-3xl shadow-input focus-within:border-primary-500 focus-within:ring-2 focus-within:ring-primary-50 transition-all p-2 flex flex-col gap-1.5">
+  <div class="relative bg-white dark:bg-surface-800 border border-surface-300 dark:border-surface-700 rounded-3xl shadow-input focus-within:border-primary-500 focus-within:ring-2 focus-within:ring-primary-50 dark:focus-within:ring-primary-500/20 transition-all p-2 flex flex-col gap-1.5">
     <!-- Input area -->
     <div class="flex items-end gap-2 px-2">
       <textarea
@@ -56,7 +56,7 @@
         aria-label="Chat message input"
         rows="1"
         disabled={$isTyping}
-        class="w-full resize-none bg-transparent border-0 focus:ring-0 focus:outline-none text-[0.95rem] text-surface-900 placeholder:text-surface-400 py-2.5 max-h-48 overflow-y-auto leading-relaxed disabled:opacity-60"
+        class="w-full resize-none bg-transparent border-0 focus:ring-0 focus:outline-none text-[0.95rem] text-surface-900 dark:text-surface-100 placeholder:text-surface-400 dark:placeholder:text-surface-500 py-2.5 max-h-48 overflow-y-auto leading-relaxed disabled:opacity-60"
       ></textarea>
 
       <!-- Submit Action Button -->
@@ -76,21 +76,21 @@
     </div>
 
     <!-- Bottom info hint -->
-    <div class="flex items-center justify-between px-2 pt-1 border-t border-surface-100 text-[11px] text-surface-400">
+    <div class="flex items-center justify-between px-2 pt-1 border-t border-surface-100 dark:border-surface-700 text-[11px] text-surface-400 dark:text-surface-500">
       <div class="flex items-center gap-1.5">
         <SparklesIcon size={12} class="text-primary-500" />
         <span>Powered by OpenRouter LLMs</span>
       </div>
       <div class="hidden sm:flex items-center gap-1">
         <span>Use</span>
-        <kbd class="px-1 py-0.5 bg-surface-100 border border-surface-200 rounded text-[10px] font-mono">Shift</kbd>
+        <kbd class="px-1 py-0.5 bg-surface-100 dark:bg-surface-700 border border-surface-200 dark:border-surface-600 rounded text-[10px] font-mono">Shift</kbd>
         <span>+</span>
-        <kbd class="px-1 py-0.5 bg-surface-100 border border-surface-200 rounded text-[10px] font-mono">Enter</kbd>
+        <kbd class="px-1 py-0.5 bg-surface-100 dark:bg-surface-700 border border-surface-200 dark:border-surface-600 rounded text-[10px] font-mono">Enter</kbd>
         <span>for newline</span>
       </div>
     </div>
   </div>
-  <p class="text-center text-[11px] text-surface-400 mt-2">
+  <p class="text-center text-[11px] text-surface-400 dark:text-surface-500 mt-2">
     AI responses may vary in accuracy. Verify important information.
   </p>
 </div>
