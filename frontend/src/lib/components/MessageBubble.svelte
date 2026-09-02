@@ -54,14 +54,14 @@
     <!-- User Message Bubble (Right aligned) -->
     <div class="flex justify-end items-start gap-3 pl-10">
       <div class="flex flex-col items-end max-w-[85%] sm:max-w-[75%]">
-        <div class="bg-surface-100 border border-surface-200 text-surface-900 px-4 py-3 rounded-2xl rounded-tr-sm text-[0.95rem] leading-relaxed shadow-sm break-words whitespace-pre-wrap">
+        <div class="bg-surface-100 dark:bg-surface-800 border border-surface-200 dark:border-surface-700 text-surface-900 dark:text-surface-100 px-4 py-3 rounded-2xl rounded-tr-sm text-[0.95rem] leading-relaxed shadow-sm break-words whitespace-pre-wrap">
           {message.content}
         </div>
-        <span class="text-[11px] text-surface-500 mt-1 mr-1">
+        <span class="text-[11px] text-surface-500 dark:text-surface-400 mt-1 mr-1">
           {formatTime(message.timestamp)}
         </span>
       </div>
-      <div class="flex-shrink-0 w-8 h-8 rounded-full bg-surface-200 flex items-center justify-center text-surface-700 shadow-sm mt-0.5">
+      <div class="flex-shrink-0 w-8 h-8 rounded-full bg-surface-200 dark:bg-surface-700 flex items-center justify-center text-surface-700 dark:text-surface-200 shadow-sm mt-0.5">
         <UserIcon size={16} />
       </div>
     </div>
@@ -71,40 +71,40 @@
       <div class="flex-shrink-0 w-8 h-8 rounded-full bg-primary-500 text-white flex items-center justify-center shadow-sm mt-0.5">
         <BotIcon size={18} />
       </div>
-      
+
       <div class="flex flex-col items-start flex-1 min-w-0 max-w-[92%] sm:max-w-[85%]">
         <!-- Header Info -->
         <div class="flex items-center gap-2 mb-1">
-          <span class="text-xs font-semibold text-surface-800">AI Assistant</span>
+          <span class="text-xs font-semibold text-surface-800 dark:text-surface-200">AI Assistant</span>
           {#if message.model}
-            <span class="text-[10px] font-mono px-2 py-0.5 bg-surface-100 text-surface-600 rounded-full border border-surface-200">
+            <span class="text-[10px] font-mono px-2 py-0.5 bg-surface-100 dark:bg-surface-800 text-surface-600 dark:text-surface-400 rounded-full border border-surface-200 dark:border-surface-700">
               {message.model.split('/').pop()}
             </span>
           {/if}
-          <span class="text-[11px] text-surface-400">{formatTime(message.timestamp)}</span>
+          <span class="text-[11px] text-surface-400 dark:text-surface-500">{formatTime(message.timestamp)}</span>
         </div>
 
         <!-- Rendered Message Body -->
         <!-- svelte-ignore a11y_click_events_have_key_events -->
         <!-- svelte-ignore a11y_no_static_element_interactions -->
         <div
-          class="markdown-body w-full text-surface-900 bg-white p-1 break-words"
+          class="markdown-body w-full text-surface-900 dark:text-surface-100 bg-white dark:bg-transparent p-1 break-words"
           on:click={handleBodyClick}
         >
           {@html renderedHtml}
         </div>
 
         <!-- Action bar -->
-        <div class="flex items-center gap-2 mt-2 text-surface-400 opacity-0 group-hover:opacity-100 transition-opacity">
+        <div class="flex items-center gap-2 mt-2 text-surface-400 dark:text-surface-500 opacity-0 group-hover:opacity-100 transition-opacity">
           <button
             type="button"
-            class="flex items-center gap-1 text-[11px] px-2 py-1 rounded hover:bg-surface-100 hover:text-surface-700 transition-colors"
+            class="flex items-center gap-1 text-[11px] px-2 py-1 rounded hover:bg-surface-100 dark:hover:bg-surface-800 hover:text-surface-700 dark:hover:text-surface-200 transition-colors"
             on:click={copyMessageContent}
             title="Copy response"
           >
             {#if copied}
-              <CheckIcon size={13} class="text-green-600" />
-              <span class="text-green-600">Copied</span>
+              <CheckIcon size={13} class="text-green-600 dark:text-green-400" />
+              <span class="text-green-600 dark:text-green-400">Copied</span>
             {:else}
               <CopyIcon size={13} />
               <span>Copy text</span>
