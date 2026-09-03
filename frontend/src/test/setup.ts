@@ -8,3 +8,12 @@ import '@testing-library/jest-dom/vitest';
 afterEach(() => {
   cleanup();
 });
+
+// jsdom doesn't implement Element.scrollTo/scrollIntoView — stub them so
+// components that scroll (e.g. ChatWindow's auto-scroll) don't throw.
+if (!Element.prototype.scrollTo) {
+  Element.prototype.scrollTo = () => {};
+}
+if (!Element.prototype.scrollIntoView) {
+  Element.prototype.scrollIntoView = () => {};
+}

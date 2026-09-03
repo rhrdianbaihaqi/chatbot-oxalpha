@@ -31,6 +31,31 @@
 
   let prevLength = 0;
 
+  // Rendering the full history gets expensive once a conversation runs long
+  // (every message re-parses/highlights markdown). Only render the most
+  // recent window by default, with a "load older" boundary to reveal more —
+  // simpler and cheaper than scroll-position virtualization for a chat list
+  // that's almost always read from the bottom up.
+  const INITIAL_VISIBLE_COUNT = 50;
+  const LOAD_MORE_STEP = 50;
+
+  let visibleCount = INITIAL_VISIBLE_COUNT;
+  let pendingScrollAdjust = false;
+  let scrollHeightBeforeLoadMore = 0;
+
+  $: totalCount = $chatHistory.length;
+  $: hiddenCount = Math.max(0, totalCount - visibleCount);
+  $: visibleMessages = $chatHistory.slice(-visibleCount);
+  $: if (totalCount === 0) visibleCount = INITIAL_VISIBLE_COUNT;
+
+  function loadOlderMessages() {
+    if (messagesContainer) {
+      scrollHeightBeforeLoadMore = messagesContainer.scrollHeight;
+      pendingScrollAdjust = true;
+    }
+    visibleCount += LOAD_MORE_STEP;
+  }
+
   function scrollToBottom(force = false) {
     if (!messagesContainer) return;
     const distanceFromBottom =
@@ -48,7 +73,17 @@
   }
 
   afterUpdate(() => {
-    const currentLength = $chatHistory.length;
+    // Older messages were just prepended above the current viewport — keep
+    // the user's visual position stable instead of letting the prepend
+    // shove everything down (or auto-scrolling, which would be jarring).
+    if (pendingScrollAdjust && messagesContainer) {
+      messagesContainer.scrollTop += messagesContainer.scrollHeight - scrollHeightBeforeLoadMore;
+      pendingScrollAdjust = false;
+      prevLength = visibleMessages.length;
+      return;
+    }
+
+    const currentLength = visibleMessages.length;
     if (currentLength !== prevLength || $isTyping) {
       scrollToBottom(currentLength > prevLength);
       prevLength = currentLength;
@@ -65,7 +100,7 @@
   class="flex-1 overflow-y-auto w-full px-4 sm:px-6 py-6 scroll-smooth"
 >
   <div class="max-w-3xl mx-auto flex flex-col gap-6 min-h-full">
-    {#if $chatHistory.length === 0}
+    {#if totalCount === 0}
       <!-- Empty / Welcome State (Google-esque Minimalist Hero) -->
       <div class="flex-1 flex flex-col items-center justify-center text-center my-auto py-10 animate-in fade-in duration-300">
         <!-- Logo / Icon -->
@@ -105,8 +140,21 @@
         </div>
       </div>
     {:else}
+      <!-- Load Older Messages Boundary -->
+      {#if hiddenCount > 0}
+        <div class="flex justify-center py-1">
+          <button
+            type="button"
+            on:click={loadOlderMessages}
+            class="text-xs font-medium text-surface-500 dark:text-surface-400 hover:text-primary-600 dark:hover:text-primary-400 bg-surface-50 dark:bg-surface-800 hover:bg-surface-100 dark:hover:bg-surface-700 border border-surface-200 dark:border-surface-700 rounded-full px-4 py-1.5 transition-colors"
+          >
+            Load {Math.min(hiddenCount, LOAD_MORE_STEP)} older messages ({hiddenCount} hidden)
+          </button>
+        </div>
+      {/if}
+
       <!-- Chat Messages List -->
-      {#each $chatHistory as msg (msg.id)}
+      {#each visibleMessages as msg (msg.id)}
         <MessageBubble message={msg} />
       {/each}
 
