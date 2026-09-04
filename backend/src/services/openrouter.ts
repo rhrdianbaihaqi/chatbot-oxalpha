@@ -1,6 +1,3 @@
-import fs from 'fs';
-import path from 'path';
-
 export interface ChatMessage {
   role: 'user' | 'assistant' | 'system';
   content: string;
@@ -21,34 +18,10 @@ export interface ChatResponsePayload {
 }
 
 function getApiKey(): string {
-  if (process.env.OPENROUTER_API_KEY && process.env.OPENROUTER_API_KEY.trim()) {
-    return process.env.OPENROUTER_API_KEY.trim();
-  }
-
-  // Attempt to load directly from .env files if not populated in process.env
-  const pathsToCheck = [
-    path.resolve(process.cwd(), 'backend/.env'),
-    path.resolve(process.cwd(), '.env'),
-    path.resolve(__dirname, '../../.env'),
-    path.resolve(__dirname, '../.env'),
-  ];
-
-  for (const envPath of pathsToCheck) {
-    if (fs.existsSync(envPath)) {
-      try {
-        const content = fs.readFileSync(envPath, 'utf8');
-        const match = content.match(/^OPENROUTER_API_KEY=(.+)$/m);
-        if (match && match[1]?.trim()) {
-          const key = match[1].trim().replace(/^["']|["']$/g, '');
-          if (key) return key;
-        }
-      } catch {
-        // ignore
-      }
-    }
-  }
-
-  return '';
+  // Bun auto-loads .env files from the process's working directory, so
+  // this is populated by the time the server starts — no need to hand-parse
+  // .env files here too.
+  return process.env.OPENROUTER_API_KEY?.trim() ?? '';
 }
 
 export async function sendChatMessage(payload: ChatRequestPayload): Promise<ChatResponsePayload> {
