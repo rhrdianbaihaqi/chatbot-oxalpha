@@ -21,6 +21,24 @@
     const interval = setInterval(checkServerHealth, 30000);
     return () => clearInterval(interval);
   });
+
+  // Most chatbots hide token usage entirely — surfacing it (and that it's
+  // running on $0-cost models) is a deliberate point of difference here.
+  $: sessionUsage = $chatHistory.reduce(
+    (acc, m) => {
+      if (m.usage) {
+        acc.totalTokens += m.usage.totalTokens;
+        acc.cost += m.usage.cost;
+      }
+      return acc;
+    },
+    { totalTokens: 0, cost: 0 }
+  );
+
+  function formatSessionTokens(n: number): string {
+    if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+    return String(n);
+  }
 </script>
 
 <div class="flex flex-col h-screen bg-white dark:bg-surface-900 text-surface-900 dark:text-surface-100 overflow-hidden font-sans">
@@ -51,6 +69,15 @@
           {:else}
             <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
             <span class="text-[11px] text-surface-500 dark:text-surface-400">Checking status...</span>
+          {/if}
+          {#if sessionUsage.totalTokens > 0}
+            <span class="text-surface-300 dark:text-surface-700">·</span>
+            <span
+              class="text-[11px] text-surface-500 dark:text-surface-400"
+              title="Cumulative token usage this session, across all models used"
+            >
+              {formatSessionTokens(sessionUsage.totalTokens)} tokens · {sessionUsage.cost > 0 ? `$${sessionUsage.cost.toFixed(4)}` : '$0.00'}
+            </span>
           {/if}
         </div>
       </div>

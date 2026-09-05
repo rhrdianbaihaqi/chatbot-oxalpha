@@ -1,5 +1,13 @@
 import { writable, get } from 'svelte/store';
 
+export interface ChatUsage {
+  promptTokens: number;
+  completionTokens: number;
+  totalTokens: number;
+  /** USD cost of this request, per OpenRouter's accounting. 0 for free-tier models. */
+  cost: number;
+}
+
 export interface ChatMessage {
   id: string;
   role: 'user' | 'assistant' | 'system';
@@ -7,6 +15,7 @@ export interface ChatMessage {
   timestamp: number;
   model?: string;
   error?: boolean;
+  usage?: ChatUsage;
 }
 
 export interface ModelOption {
@@ -89,13 +98,19 @@ selectedModel.subscribe((model) => {
 });
 
 // Actions & Helpers
-export function addMessage(role: 'user' | 'assistant' | 'system', content: string, model?: string): ChatMessage {
+export function addMessage(
+  role: 'user' | 'assistant' | 'system',
+  content: string,
+  model?: string,
+  usage?: ChatUsage
+): ChatMessage {
   const newMsg: ChatMessage = {
     id: 'msg-' + Math.random().toString(36).substring(2, 9),
     role,
     content,
     timestamp: Date.now(),
     model,
+    usage,
   };
   chatHistory.update((history) => [...history, newMsg]);
   return newMsg;
@@ -176,7 +191,7 @@ export async function sendMessage(content: string) {
         currentModel
       );
     } else if (data.message && data.message.content) {
-      addMessage('assistant', data.message.content, currentModel);
+      addMessage('assistant', data.message.content, currentModel, data.usage);
     }
   } catch (err: any) {
     if (err?.name === 'AbortError') {

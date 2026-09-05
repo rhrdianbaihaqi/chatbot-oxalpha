@@ -45,6 +45,11 @@
     return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   }
 
+  function formatTokenCount(n: number): string {
+    if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+    return String(n);
+  }
+
   $: renderedHtml = message.role === 'assistant' ? renderMarkdown(message.content) : '';
   $: isUser = message.role === 'user';
 </script>
@@ -79,6 +84,14 @@
           {#if message.model}
             <span class="text-[10px] font-mono px-2 py-0.5 bg-surface-100 dark:bg-surface-800 text-surface-600 dark:text-surface-400 rounded-full border border-surface-200 dark:border-surface-700">
               {message.model.split('/').pop()}
+            </span>
+          {/if}
+          {#if message.usage}
+            <span
+              class="text-[10px] font-mono px-2 py-0.5 bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400 rounded-full border border-emerald-200 dark:border-emerald-900"
+              title="{message.usage.promptTokens} prompt + {message.usage.completionTokens} completion tokens{message.usage.cost > 0 ? ` · $${message.usage.cost.toFixed(4)}` : ' · $0.00 (free model)'}"
+            >
+              {formatTokenCount(message.usage.totalTokens)} tok{message.usage.cost === 0 ? ' · free' : ''}
             </span>
           {/if}
           <span class="text-[11px] text-surface-400 dark:text-surface-500">{formatTime(message.timestamp)}</span>
