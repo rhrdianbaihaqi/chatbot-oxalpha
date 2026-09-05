@@ -119,6 +119,25 @@ describe('sendMessage', () => {
     expect(get(lastFailedMessage)).toBeNull();
   });
 
+  it('attaches token usage from the API response to the assistant message', async () => {
+    mockFetchOnce({
+      ok: true,
+      jsonBody: {
+        success: true,
+        message: { content: 'Hi there!' },
+        usage: { promptTokens: 18, completionTokens: 224, totalTokens: 242, cost: 0 },
+      },
+    });
+
+    await sendMessage('hello');
+
+    const history = get(chatHistory);
+    expect(history.at(-1)).toMatchObject({
+      role: 'assistant',
+      usage: { promptTokens: 18, completionTokens: 224, totalTokens: 242, cost: 0 },
+    });
+  });
+
   it('records an error and the failed message when the API reports failure', async () => {
     mockFetchOnce({
       ok: true,

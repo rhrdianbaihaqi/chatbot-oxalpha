@@ -8,12 +8,21 @@ export interface ChatRequestPayload {
   messages: ChatMessage[];
 }
 
+export interface ChatUsage {
+  promptTokens: number;
+  completionTokens: number;
+  totalTokens: number;
+  /** USD cost of this request, per OpenRouter's accounting. 0 for free-tier models. */
+  cost: number;
+}
+
 export interface ChatResponsePayload {
   success: boolean;
   message?: {
     role: 'assistant';
     content: string;
   };
+  usage?: ChatUsage;
   error?: string;
 }
 
@@ -82,12 +91,23 @@ export async function sendChatMessage(payload: ChatRequestPayload): Promise<Chat
       };
     }
 
+    const rawUsage = data.usage;
+    const usage: ChatUsage | undefined = rawUsage
+      ? {
+          promptTokens: rawUsage.prompt_tokens ?? 0,
+          completionTokens: rawUsage.completion_tokens ?? 0,
+          totalTokens: rawUsage.total_tokens ?? 0,
+          cost: rawUsage.cost ?? 0,
+        }
+      : undefined;
+
     return {
       success: true,
       message: {
         role: 'assistant',
         content: assistantMessage.content
-      }
+      },
+      usage,
     };
   } catch (err: any) {
     if (err?.name === 'TimeoutError' || err?.message?.includes('timeout')) {
