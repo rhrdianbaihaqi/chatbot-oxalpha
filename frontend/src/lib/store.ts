@@ -17,33 +17,34 @@ export interface ModelOption {
   badge?: string;
 }
 
+// All free-tier (":free") OpenRouter models — zero cost per token, so
+// there's no billing risk from normal usage.
 export const POPULAR_MODELS: ModelOption[] = [
   {
-    id: 'openai/gpt-4o-mini',
-    name: 'GPT-4o Mini',
-    provider: 'OpenAI',
-    description: 'Fast, intelligent, and highly cost-effective model',
+    id: 'nvidia/nemotron-3.5-lightning:free',
+    name: 'Nemotron 3.5 Lightning',
+    provider: 'NVIDIA',
+    description: 'High-throughput agentic model tuned for speed and scale',
     badge: 'Popular',
   },
   {
-    id: 'anthropic/claude-3.5-sonnet',
-    name: 'Claude 3.5 Sonnet',
-    provider: 'Anthropic',
-    description: 'Top-tier reasoning, code generation, and writing',
-    badge: 'Pro',
-  },
-  {
-    id: 'deepseek/deepseek-chat',
-    name: 'DeepSeek V3',
-    provider: 'DeepSeek',
-    description: 'Powerful next-gen reasoning and code intelligence',
+    id: 'poolside/laguna-s-2.1:free',
+    name: 'Laguna S 2.1',
+    provider: 'Poolside',
+    description: "Poolside's latest coding agent model, tuned for dev workflows",
     badge: 'Trending',
   },
   {
-    id: 'google/gemini-2.0-flash-001',
-    name: 'Gemini 2.0 Flash',
-    provider: 'Google',
-    description: 'Next-gen speed and multimodal intelligence',
+    id: 'liquid/lfm-2.5-2.6b:free',
+    name: 'LFM 2.5',
+    provider: 'Liquid AI',
+    description: 'Compact reasoning model for agents, RAG, and long-context tasks',
+  },
+  {
+    id: 'inclusionai/ling-3.0-flash-fin:free',
+    name: 'Ling 3.0 Flash Fin',
+    provider: 'InclusionAI',
+    description: 'Finance-focused model tuned for real-world investment analysis',
   },
 ];
 
@@ -63,7 +64,7 @@ function readStoredJSON<T>(key: string, fallback: T): T {
 export const chatHistory = writable<ChatMessage[]>(readStoredJSON(CHAT_HISTORY_KEY, []));
 export const isTyping = writable<boolean>(false);
 export const selectedModel = writable<string>(
-  readStoredJSON(SELECTED_MODEL_KEY, 'openai/gpt-4o-mini')
+  readStoredJSON(SELECTED_MODEL_KEY, 'nvidia/nemotron-3.5-lightning:free')
 );
 export const serverStatus = writable<'checking' | 'online' | 'offline'>('checking');
 export const errorMessage = writable<string | null>(null);

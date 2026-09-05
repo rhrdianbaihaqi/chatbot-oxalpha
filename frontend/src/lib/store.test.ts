@@ -212,10 +212,10 @@ describe('localStorage persistence', () => {
   });
 
   it('persists selectedModel writes under the namespaced key', () => {
-    selectedModel.set('anthropic/claude-3.5-sonnet');
+    selectedModel.set('liquid/lfm-2.5-2.6b:free');
 
     const stored = JSON.parse(localStorage.getItem('oxalpha:selectedModel') ?? 'null');
-    expect(stored).toBe('anthropic/claude-3.5-sonnet');
+    expect(stored).toBe('liquid/lfm-2.5-2.6b:free');
   });
 
   it('hydrates chatHistory and selectedModel from localStorage on module load', async () => {
@@ -223,7 +223,7 @@ describe('localStorage persistence', () => {
       'oxalpha:chatHistory',
       JSON.stringify([{ id: 'x', role: 'user', content: 'hi', timestamp: 1 }])
     );
-    localStorage.setItem('oxalpha:selectedModel', JSON.stringify('anthropic/claude-3.5-sonnet'));
+    localStorage.setItem('oxalpha:selectedModel', JSON.stringify('liquid/lfm-2.5-2.6b:free'));
 
     vi.resetModules();
     const fresh = await import('./store');
@@ -231,7 +231,7 @@ describe('localStorage persistence', () => {
     expect(get(fresh.chatHistory)).toEqual([
       { id: 'x', role: 'user', content: 'hi', timestamp: 1 },
     ]);
-    expect(get(fresh.selectedModel)).toBe('anthropic/claude-3.5-sonnet');
+    expect(get(fresh.selectedModel)).toBe('liquid/lfm-2.5-2.6b:free');
   });
 
   it('falls back to defaults when localStorage holds corrupted JSON', async () => {

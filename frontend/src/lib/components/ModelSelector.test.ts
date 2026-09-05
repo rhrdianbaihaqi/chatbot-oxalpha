@@ -4,7 +4,7 @@ import ModelSelector from './ModelSelector.svelte';
 import { selectedModel } from '../store';
 
 beforeEach(() => {
-  selectedModel.set('openai/gpt-4o-mini');
+  selectedModel.set('nvidia/nemotron-3.5-lightning:free');
 });
 
 describe('ModelSelector', () => {
@@ -13,7 +13,7 @@ describe('ModelSelector', () => {
     const trigger = screen.getByRole('button', { name: /select ai model/i });
     expect(trigger).toHaveAttribute('aria-haspopup', 'listbox');
     expect(trigger).toHaveAttribute('aria-expanded', 'false');
-    expect(trigger.textContent).toContain('GPT-4o Mini');
+    expect(trigger.textContent).toContain('Nemotron 3.5 Lightning');
   });
 
   it('opens the dropdown as a listbox with the popular models', async () => {
@@ -33,14 +33,14 @@ describe('ModelSelector', () => {
     render(ModelSelector);
     await fireEvent.click(screen.getByRole('button', { name: /select ai model/i }));
 
-    const claudeOption = screen.getByRole('option', { name: /Claude 3.5 Sonnet/i });
-    await fireEvent.click(claudeOption);
+    const otherOption = screen.getByRole('option', { name: /LFM 2.5/i });
+    await fireEvent.click(otherOption);
 
     expect(selectedModel).toBeDefined();
     // Dropdown should close after selection.
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
     const trigger = screen.getByRole('button', { name: /select ai model/i });
-    expect(trigger.textContent).toContain('Claude 3.5 Sonnet');
+    expect(trigger.textContent).toContain('LFM 2.5');
   });
 
   it('closes the dropdown on Escape', async () => {
