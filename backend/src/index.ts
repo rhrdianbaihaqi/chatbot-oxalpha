@@ -67,7 +67,7 @@ const app = new Elysia()
       }
 
       const result = await sendChatMessage({
-        model: model || 'openai/gpt-4o-mini',
+        model: model || 'nvidia/nemotron-3.5-lightning:free',
         messages,
       });
 

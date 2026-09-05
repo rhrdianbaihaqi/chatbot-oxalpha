@@ -51,7 +51,7 @@ export async function sendChatMessage(payload: ChatRequestPayload): Promise<Chat
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: payload.model || 'openai/gpt-4o-mini',
+        model: payload.model || 'nvidia/nemotron-3.5-lightning:free',
         messages: payload.messages,
       }),
       signal: AbortSignal.timeout(45000),
